@@ -74,20 +74,6 @@ intptr write(int fd, void const* data, uintptr nbytes)
             0  /* ignored */
         );
 }
-//
-// static
-// intptr setuid(uintptr uid)
-// {
-//     return (intptr)
-//         syscall(
-//             (void*)113,
-//             (void*)uid,
-//             (void*)0,
-//             (void*)0,
-//             0, /* ignored */
-//             0  /* ignored */
-//         );
-// }
 
 #define BUFLEN 16
 
@@ -125,7 +111,6 @@ void reverse(char * buf, int right) {
 int itoa(char * buf, unsigned int n) {
 	int digit;
 	int i = 0;
-	buf[i++] = '\n';
 	for (; i < BUFLEN; ++i) {
 		digit = n % 10;
 		buf[i] = '0' + digit;
@@ -191,7 +176,11 @@ int main(int argc, char *argv[]) {
 		default:
 			return 2;
 	}
-	const int len = itoa(buf, result);
+	int len = itoa(buf, result);
+	if (len < BUFLEN) {
+		// append newline
+		buf[len++] = '\n';
+	}
 	write(1, buf, len);
 	write_file(fn_current, buf, len);
 	return len;
