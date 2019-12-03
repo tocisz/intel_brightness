@@ -101,10 +101,11 @@ int atoi(char * buf)
 
 void reverse(char * buf, int right) {
 	int left = -1;
+	int tmp;
 	while (++left < --right) {
-		buf[left]  ^= buf[right];
-		buf[right] ^= buf[left];
-		buf[left]  ^= buf[right];
+		tmp  = buf[right];
+		buf[right] = buf[left];
+		buf[left]  = tmp;
 	}
 }
 
